@@ -10,7 +10,7 @@ export const graffiti = Permanent_Marker({
 });
 
 export const metadata: Metadata = {
-  title: "WRKsbyM.A.",
+  title: "Migle Arambulo",
   description: "Portfolio",
 };
 
