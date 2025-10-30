@@ -7,14 +7,16 @@ type Palette = {
   vars: Partial<Record<"--bg" | "--fg" | "--muted" | "--panel" | "--border" | "--accent", string>>;
 };
 
-// A few tasteful presets (you can add more)
+// Curated color palettes with background, text, and accent colors
 const PRESETS: Palette[] = [
-  { name: "Night Violet", vars: { "--bg":"#0a0a0a","--fg":"#f5f5f5","--muted":"#b8b8b8","--panel":"#161616","--border":"#262626","--accent":"#8b5cf6" } },
-  { name: "Ink & Cream", vars: { "--bg":"#0b0b0b","--fg":"#fffaf0","--muted":"#c9c3b8","--panel":"#141414","--border":"#2a2a2a","--accent":"#ffd166" } },
-  { name: "Slate Mint", vars: { "--bg":"#0e141b","--fg":"#eaf1f1","--muted":"#9fb1b3","--panel":"#141b22","--border":"#22303b","--accent":"#34d399" } },
-  { name: "Carbon Rose", vars: { "--bg":"#0b0b0c","--fg":"#f7f7fb","--muted":"#b9b9c8","--panel":"#151517","--border":"#292933","--accent":"#f472b6" } },
-  { name: "Deep Ocean", vars: { "--bg":"#0a0f14","--fg":"#e8eff6","--muted":"#a8b6c2","--panel":"#10161d","--border":"#1f2933","--accent":"#60a5fa" } },
-  { name: "Graphite Lime", vars: { "--bg":"#0d0d0d","--fg":"#f3f7f0","--muted":"#b7c4b2","--panel":"#151515","--border":"#2b2b2b","--accent":"#a3e635" } },
+  { name: "Default Dark", vars: { "--bg":"#0a0a0a","--fg":"#f2f2f2","--muted":"#b8b8b8","--panel":"#161616","--border":"#262626","--accent":"#8b5cf6" } },
+  { name: "Midnight Blue", vars: { "--bg":"#0f172a","--fg":"#f1f5f9","--muted":"#94a3b8","--panel":"#1e293b","--border":"#334155","--accent":"#3b82f6" } },
+  { name: "Forest Green", vars: { "--bg":"#0c1f17","--fg":"#ecfdf5","--muted":"#86efac","--panel":"#1a2e22","--border":"#22543d","--accent":"#10b981" } },
+  { name: "Sunset Orange", vars: { "--bg":"#1f1611","--fg":"#fefce8","--muted":"#fbbf24","--panel":"#2d1f0e","--border":"#451a03","--accent":"#f59e0b" } },
+  { name: "Rose Gold", vars: { "--bg":"#1f0f15","--fg":"#fdf2f8","--muted":"#f9a8d4","--panel":"#2d1317","--border":"#4c1d34","--accent":"#ec4899" } },
+  { name: "Arctic White", vars: { "--bg":"#ffffff","--fg":"#111827","--muted":"#6b7280","--panel":"#f9fafb","--border":"#e5e7eb","--accent":"#3b82f6" } },
+  { name: "Warm Cream", vars: { "--bg":"#fefbf3","--fg":"#1c1917","--muted":"#78716c","--panel":"#f5f5f4","--border":"#d6d3d1","--accent":"#ea580c" } },
+  { name: "Purple Haze", vars: { "--bg":"#1e1b4b","--fg":"#f1f5f9","--muted":"#a78bfa","--panel":"#312e81","--border":"#4c1d95","--accent":"#8b5cf6" } },
 ];
 
 const STORAGE_KEY = "ma-theme";
@@ -30,6 +32,7 @@ export default function PalettePicker() {
   const [open, setOpen] = useState(false);
   const [accent, setAccent] = useState<string>("");
   const [accentInput, setAccentInput] = useState<string>("");
+  const [currentPalette, setCurrentPalette] = useState<string>("Default Dark");
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -39,6 +42,9 @@ export default function PalettePicker() {
       try {
         const parsed = JSON.parse(raw);
         applyPalette(parsed);
+        if (parsed._paletteName) {
+          setCurrentPalette(parsed._paletteName);
+        }
         if (parsed["--accent"]) {
           setAccent(parsed["--accent"]);
           setAccentInput(parsed["--accent"]);
@@ -63,7 +69,8 @@ export default function PalettePicker() {
 
   function choosePreset(p: Palette) {
     applyPalette(p.vars);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(p.vars));
+    setCurrentPalette(p.name);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...p.vars, _paletteName: p.name }));
     if (p.vars["--accent"]) {
       setAccent(p.vars["--accent"]);
       setAccentInput(p.vars["--accent"]);
@@ -106,16 +113,25 @@ export default function PalettePicker() {
 
       {open && (
         <div className="palette-panel" role="menu" aria-label="Color palette">
-          <div className="palette-row">
+          <div className="palette-grid">
             {PRESETS.map((p) => (
               <button
                 key={p.name}
-                className="swatch"
-                style={{ background: p.vars["--accent"], boxShadow: "inset 0 0 0 1000px rgba(255,255,255,0.05)" }}
-                title={p.name}
+                className={`palette-swatch ${currentPalette === p.name ? 'active' : ''}`}
                 onClick={() => choosePreset(p)}
                 aria-label={`Use ${p.name} theme`}
-              />
+                title={p.name}
+              >
+                <div 
+                  className="swatch-bg" 
+                  style={{ backgroundColor: p.vars["--bg"] }}
+                />
+                <div 
+                  className="swatch-accent" 
+                  style={{ backgroundColor: p.vars["--accent"] }}
+                />
+                <span className="swatch-name">{p.name}</span>
+              </button>
             ))}
           </div>
 
