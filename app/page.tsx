@@ -58,7 +58,7 @@ export default function Home() {
 
       {/* FOOTER */}
       <footer className="footer">
-        <a href="mailto:you@example.com" className="contact">Contact me</a>
+        <a href="mailto:miglearambulo19@gmail.com" className="contact">Contact me</a>
       </footer>
     </main>
   );
