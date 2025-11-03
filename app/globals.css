@@ -74,8 +74,12 @@ body{
 .dropdown a{
   display:block; padding:10px 12px;
   color: var(--fg); text-decoration:none; border-radius:8px; font-size:.95rem;
+  transition: background-color 0.2s ease;
 }
-.dropdown a:hover{ background:#1f1f1f; }
+.dropdown a:hover{ 
+  background: var(--accent); 
+  color: white; 
+}
 
 /* Palette panel */
 .palette-panel{ padding:12px; width:280px; }
