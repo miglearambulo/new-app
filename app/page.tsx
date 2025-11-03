@@ -39,9 +39,9 @@ export default function Home() {
 
             {open && (
               <div id="projects-menu" role="menu" className="dropdown">
-                <a role="menuitem" href="#" target="_blank" rel="noreferrer">Coinstructive Redesign</a>
-                <a role="menuitem" href="#" target="_blank" rel="noreferrer">Chef — Recipe Dev App</a>
-                <a role="menuitem" href="#" target="_blank" rel="noreferrer">Pixels & Cursors</a>
+                <a role="menuitem" href="#" target="_blank" rel="noreferrer">1. Coinstructive Redesign</a>
+                <a role="menuitem" href="#" target="_blank" rel="noreferrer">2. Chef — Recipe Dev App</a>
+                <a role="menuitem" href="#" target="_blank" rel="noreferrer">3. EcoTime</a>
                 <a role="menuitem" href="#" target="_blank" rel="noreferrer">More…</a>
               </div>
             )}
