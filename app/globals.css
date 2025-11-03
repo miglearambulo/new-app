@@ -52,6 +52,7 @@ body{
   display:inline-flex; align-items:center; gap:8px;
   padding:8px 10px; background: transparent; color:#fff;
   border:none; border-radius:8px; font-weight:600; cursor:pointer; line-height:1;
+  font-family: 'Share Tech Mono', 'Courier New', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
 }
 .menu-trigger:hover, .palette-trigger:hover{ opacity:.9; }
 .menu-trigger:focus-visible, .palette-trigger:focus-visible{
