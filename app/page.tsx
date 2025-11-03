@@ -19,7 +19,7 @@ export default function Home() {
     <main className="page">
       {/* HEADER */}
       <header className="header">
-        <a href="#" className="brand">WRK</a>
+        <a href="#" className="brand">create:design</a>
 
         <div className="controls">
           {/* Projects dropdown */}
@@ -31,7 +31,7 @@ export default function Home() {
               aria-controls="projects-menu"
               onClick={() => setOpen(v => !v)}
             >
-              Projects
+              .projects
               <svg className={`chev ${open ? "rot" : ""}`} width="14" height="14" viewBox="0 0 20 20" aria-hidden="true">
                 <path d="M5 7l5 6 5-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
