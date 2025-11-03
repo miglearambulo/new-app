@@ -10,13 +10,9 @@ type Palette = {
 // Curated color palettes with background, text, and accent colors
 const PRESETS: Palette[] = [
   { name: "Default Dark", vars: { "--bg":"#0a0a0a","--fg":"#f2f2f2","--muted":"#b8b8b8","--panel":"#161616","--border":"#262626","--accent":"#8b5cf6" } },
-  { name: "Midnight Blue", vars: { "--bg":"#0f172a","--fg":"#f1f5f9","--muted":"#94a3b8","--panel":"#1e293b","--border":"#334155","--accent":"#3b82f6" } },
+  { name: "Arctic White", vars: { "--bg":"#ffffff","--fg":"#111827","--muted":"#6b7280","--panel":"#f9fafb","--border":"#e5e7eb","--accent":"#3b82f6" } },
   { name: "Forest Green", vars: { "--bg":"#0c1f17","--fg":"#ecfdf5","--muted":"#86efac","--panel":"#1a2e22","--border":"#22543d","--accent":"#10b981" } },
   { name: "Sunset Orange", vars: { "--bg":"#1f1611","--fg":"#fefce8","--muted":"#fbbf24","--panel":"#2d1f0e","--border":"#451a03","--accent":"#f59e0b" } },
-  { name: "Rose Gold", vars: { "--bg":"#1f0f15","--fg":"#fdf2f8","--muted":"#f9a8d4","--panel":"#2d1317","--border":"#4c1d34","--accent":"#ec4899" } },
-  { name: "Arctic White", vars: { "--bg":"#ffffff","--fg":"#111827","--muted":"#6b7280","--panel":"#f9fafb","--border":"#e5e7eb","--accent":"#3b82f6" } },
-  { name: "Warm Cream", vars: { "--bg":"#fefbf3","--fg":"#1c1917","--muted":"#78716c","--panel":"#f5f5f4","--border":"#d6d3d1","--accent":"#ea580c" } },
-  { name: "Purple Haze", vars: { "--bg":"#1e1b4b","--fg":"#f1f5f9","--muted":"#a78bfa","--panel":"#312e81","--border":"#4c1d95","--accent":"#8b5cf6" } },
 ];
 
 const STORAGE_KEY = "ma-theme";
@@ -30,8 +26,6 @@ function applyPalette(p: Palette["vars"]) {
 
 export default function PalettePicker() {
   const [open, setOpen] = useState(false);
-  const [accent, setAccent] = useState<string>("");
-  const [accentInput, setAccentInput] = useState<string>("");
   const [currentPalette, setCurrentPalette] = useState<string>("Default Dark");
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -45,17 +39,7 @@ export default function PalettePicker() {
         if (parsed._paletteName) {
           setCurrentPalette(parsed._paletteName);
         }
-        if (parsed["--accent"]) {
-          setAccent(parsed["--accent"]);
-          setAccentInput(parsed["--accent"]);
-        }
       } catch {}
-    } else {
-      // Set current CSS variables as baseline
-      const cs = getComputedStyle(document.documentElement);
-      const currentAccent = cs.getPropertyValue("--accent").trim();
-      setAccent(currentAccent);
-      setAccentInput(currentAccent);
     }
   }, []);
 
@@ -71,26 +55,6 @@ export default function PalettePicker() {
     applyPalette(p.vars);
     setCurrentPalette(p.name);
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...p.vars, _paletteName: p.name }));
-    if (p.vars["--accent"]) {
-      setAccent(p.vars["--accent"]);
-      setAccentInput(p.vars["--accent"]);
-    }
-  }
-
-  function changeAccent(hex: string) {
-    setAccent(hex);
-    setAccentInput(hex);
-    const cs = getComputedStyle(document.documentElement);
-    const current = {
-      "--bg": cs.getPropertyValue("--bg").trim(),
-      "--fg": cs.getPropertyValue("--fg").trim(),
-      "--muted": cs.getPropertyValue("--muted").trim(),
-      "--panel": cs.getPropertyValue("--panel").trim(),
-      "--border": cs.getPropertyValue("--border").trim(),
-      "--accent": hex,
-    };
-    applyPalette(current);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
   }
 
   return (
@@ -133,31 +97,6 @@ export default function PalettePicker() {
                 <span className="swatch-name">{p.name}</span>
               </button>
             ))}
-          </div>
-
-          <div className="sep"></div>
-
-          <div className="inline">
-            <label htmlFor="accent">Accent</label>
-            <input
-              id="accent"
-              className="input-color"
-              type="color"
-              value={accent || "#8b5cf6"}
-              onChange={(e) => changeAccent(e.target.value)}
-            />
-            <input
-              className="input-text"
-              type="text"
-              placeholder="#RRGGBB"
-              value={accentInput}
-              onChange={(e)=> setAccentInput(e.target.value)}
-              onBlur={()=>{
-                const v = accentInput.trim();
-                if (/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(v)) changeAccent(v);
-                else setAccentInput(accent);
-              }}
-            />
           </div>
         </div>
       )}
